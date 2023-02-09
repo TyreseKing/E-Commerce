@@ -4,36 +4,36 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', async(req, res) => {
- try {
-  const productData = await product.findAll({
-    include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagIds'}]
-  });
-  res.status(200).json(productData);
- } catch (err) {
-  res.status(500).json(err)
- }
+router.get('/', async (req, res) => {
+  try {
+    const productData = await Product.findAll({
+      include: [{ model: Category, as: 'catrgory' }, { model: Tag, through: ProductTag, as: 'tagIds' }]
+    });
+    res.status(200).json(productData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // get one product
-router.get('/:id', async(req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const productDataById = await product.findByPk(req.params.id, {
-      include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagIds'}]
+    const productDataById = await Product.findByPk(req.params.id, {
+      include: [{ model: Category, as: 'catrgory' }, { model: Tag, through: ProductTag, as: 'tagIds' }]
     });
-  
+
     if (!productDataById) {
       res.status(404).json({ message: 'No product found with that id' });
     }
     res.status(200).json(productDataById);
   } catch (err) {
-   res.status(500).json(err)
+    res.status(500).json(err)
   }
 });
 
 // create new product
 router.post('/', (req, res) => {
-  
+
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -98,7 +98,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const deleteProduct = await Product.destory({
       where: {
@@ -106,14 +106,14 @@ router.delete('/:id', async(req, res) => {
       },
     });
 
-    if(!deleteProduct) {
-      res.status(404).json({message: 'NO product found with that id' });
+    if (!deleteProduct) {
+      res.status(404).json({ message: 'NO product found with that id' });
       return;
     }
 
     res.status(200).json(deleteProduct);
   } catch (err) {
-   res.status(500).json(err)
+    res.status(500).json(err)
   }
 });
 

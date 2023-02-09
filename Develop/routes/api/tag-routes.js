@@ -5,7 +5,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-    const tagsData = await tag.findAll({
+    const tagsData = await Tag.findAll({
       include: [{ model: Product, through: ProductTag, as: 'taggedProducts' }],
     });
     res.status(500).json(tagsData)
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const updatedTag = await tag.update({
+    const updatedTag = await Tag.update({
       tag_name: req.body.tag_name,
     }, {
       where: {
