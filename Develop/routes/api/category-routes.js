@@ -16,7 +16,7 @@ router.get('/', async(req, res) => {
 router.get('/:id', async(req, res) => {
   try {
     const categoriesDataById = await Category.findByPk(req.params.id ,{
-      include: [{model:product, as: 'products' }],
+      include: [{model: Product, as: 'products' }],
     });
 
     if (!categoriesDataById){
@@ -61,7 +61,7 @@ router.put('/:id', async(req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try {
-    const deleteCategory = await Category.destory({
+    const deleteCategory = await Category.destroy({
       where: {
         id: req.params.id,
       },

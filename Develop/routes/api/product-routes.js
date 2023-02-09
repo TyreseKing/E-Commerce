@@ -7,7 +7,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', async(req, res) => {
  try {
   const productData = await product.findAll({
-    include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagids'}]
+    include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagIds'}]
   });
   res.status(200).json(productData);
  } catch (err) {
@@ -19,7 +19,7 @@ router.get('/', async(req, res) => {
 router.get('/:id', async(req, res) => {
   try {
     const productDataById = await product.findByPk(req.params.id, {
-      include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagids'}]
+      include: [{ model: Category, as: 'catrgory'}, { model: Tag, through: ProductTag, as: 'tagIds'}]
     });
   
     if (!productDataById) {
@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
         return ProductTag.bulkCreate(productTagIdArr);
       }
       // if no product tags, just respond
-      res.status(200).json(product);
+      res.status(201).json(product);
     })
     .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
@@ -100,7 +100,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try {
-    const deleteProduct = await product.destory({
+    const deleteProduct = await Product.destory({
       where: {
         id: req.params.id
       },
@@ -110,6 +110,8 @@ router.delete('/:id', async(req, res) => {
       res.status(404).json({message: 'NO product found with that id' });
       return;
     }
+
+    res.status(200).json(deleteProduct);
   } catch (err) {
    res.status(500).json(err)
   }
